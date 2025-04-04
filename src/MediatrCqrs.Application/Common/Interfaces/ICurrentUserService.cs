@@ -2,5 +2,5 @@ namespace MediatrCqrs.Application.Common.Interfaces;
 
 public class ICurrentUserService
 {
-    string? UserId { get; }
+    public string? UserId { get; set; }
 }

@@ -20,6 +20,7 @@ public abstract class ValueObject
             .Aggregate((x, y) => x ^ y);
     }
 
+#pragma warning disable IDE0046 // Convert to conditional expression
     protected static bool EqualOperator(ValueObject left, ValueObject right)
     {
 
@@ -32,6 +33,7 @@ public abstract class ValueObject
 
     }
 
+#pragma warning restore IDE0046 // Convert to conditional expression
     protected static bool NotEqualOperator(ValueObject left, ValueObject right)
     {
         return !EqualOperator(left, right);
