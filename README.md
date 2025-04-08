@@ -5,6 +5,8 @@ This project demonstrates the implementation of a Task Manager API using the Med
 
 ## Architecture
 
+![Domain-Layers Block Diagram](/assets/mediator-cqrs-layers-block-diagram.svg)
+
 ### Mediator Pattern
 The Mediator pattern reduces coupling between components by introducing a mediator object that handles the communication between them. In this implementation, we use the MediatR library to:
 - Decouple request senders from request handlers
@@ -43,3 +45,9 @@ src/
 ├── MediatorCqrs.Domain        # Domain models and logic
 └── MediatorCqrs.Infrastructure # Data access and external services
 ```
+
+## Reference
+
+This experimental project structure is base from [VerticalSliceArchitecture](https://github.com/nadirbad/VerticalSliceArchitecture) from [nadirbad](https://github.com/nadirbad).
+
+
