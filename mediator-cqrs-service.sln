@@ -7,7 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{827E0CD3-B72
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediatrCqrs.Application", "src\MediatrCqrs.Application\MediatrCqrs.Application.csproj", "{C5DC3BDE-8CE9-4C0F-A196-EAFE22E816FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediatorCqrs.API", "src\MediatorCqrs.API\MediatorCqrs.API.csproj", "{41022485-6A81-4590-8FE1-0B44974A61D8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediatrCqrs.API", "src\MediatorCqrs.API\MediatrCqrs.API.csproj", "{41022485-6A81-4590-8FE1-0B44974A61D8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0AB3BF05-4346-4AA6-1389-037BE0695223}"
 EndProject
