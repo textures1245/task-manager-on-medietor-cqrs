@@ -3,13 +3,15 @@ using ErrorOr;
 using FluentValidation;
 using MediatR;
 using MediatrCqrs.Application.Common;
+using MediatrCqrs.Application.Domain.Entities.Task;
+using MediatrCqrs.Application.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MediatrCqrs.Application.Features.TaskItems;
 
 public class CreateTaskItemController : ApiControllerBase
 {
-    [HttpPost("/api/todo-items")]
+    [HttpPost("/api/task-items")]
     public async Task<IActionResult> Create(CreateTaskItemCommand command)
     {
         var result = await Mediator.Send(command);
@@ -18,9 +20,9 @@ public class CreateTaskItemController : ApiControllerBase
     }
 }
 
-public record CreateTaskItemCommand(Guid ListId, string? title) : IRequest<ErrorOr<Guid>>;
+public record CreateTaskItemCommand(Guid ListId, string? Title) : IRequest<ErrorOr<Guid>>;
 
-internal sealed class CreateTaskItemCommandValidator : AbstractValidator<CreatedTaskItemCommand>
+internal sealed class CreateTaskItemCommandValidator : AbstractValidator<CreateTaskItemCommand>
 {
     public CreateTaskItemCommandValidator()
     {
@@ -28,11 +30,26 @@ internal sealed class CreateTaskItemCommandValidator : AbstractValidator<Created
     }
 }
 
-internal sealed class CreateTaskItemHandler(ApplicationDbContext context) : IRequestHandler<CreateTaskItemCommand, ErrorOr<Guid>>
+internal sealed class CreateTaskItemCommandHandler(ApplicationDbContext context) : IRequestHandler<CreateTaskItemCommand, ErrorOr<Guid>>
 {
     private readonly ApplicationDbContext _context = context;
-    public Task<ErrorOr<Guid>> Handle(CreateTaskItemCommand request, CancellationToken cancellationToken)
+    public async Task<ErrorOr<Guid>> Handle(CreateTaskItemCommand request, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var entity = new TaskItem
+        {
+            ListId = request.ListId,
+            Title = request.Title,
+            Done = false
+        };
+
+        entity.DomainEvents.Add(new TaskItemCreatedEvent(entity));
+
+        _context.TaskItems.Add(entity);
+
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return entity.Id;
+
+
     }
 }
