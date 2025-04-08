@@ -1,9 +1,8 @@
-using System.Reflection.Metadata.Ecma335;
-
 using ErrorOr;
+using MediatrCqrs.Application.Common;
 namespace MediatrCqrs.Application.Domain.ValueObjects.Colour;
 
-public class Colour
+public class Colour : ValueObject
 {
     static Colour() { }
 
@@ -11,6 +10,7 @@ public class Colour
 
     private Colour(string code)
     {
+
         Code = code;
     }
 
