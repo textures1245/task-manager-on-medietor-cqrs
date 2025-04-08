@@ -1,41 +1,50 @@
+using MediatrCqrs.Application;
+using Microsoft.OpenApi.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddCors(opt => opt.AddDefaultPolicy(
+    policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()
+));
+
+builder.Services.AddSwaggerGen(c => c.SwaggerDoc("v1", new OpenApiInfo { Title = "VSA Task API", Version = "v1" }));
+
+builder.Services.AddProblemDetails();
+
+builder.Services.AddApplication();
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+app.UseSwagger();
+
+app.UseSwaggerUI(opts =>
 {
-    app.MapOpenApi();
-}
+    opts.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+    opts.RoutePrefix = string.Empty;
+});
+
+app.UseCors();
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
+if (app.Environment.IsDevelopment())
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+    app.UseExceptionHandler("/error-development");
+}
+else
+{
+    app.UseExceptionHandler("/error");
+}
 
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
+app.UseAuthorization();
+app.MapControllers();
 
 app.Run();
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
+public partial class Program { }
+
+
